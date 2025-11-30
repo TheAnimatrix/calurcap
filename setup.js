@@ -60,6 +60,7 @@ async function main() {
   }
 
   // 4. Update src/lib/supabaseClient.ts
+  // 4. Update src/lib/supabaseClient.ts
   if (supabaseUrl || supabaseKey) {
     const supabasePath = path.join(process.cwd(), 'src/lib/supabaseClient.ts');
     if (fs.existsSync(supabasePath)) {
@@ -69,6 +70,66 @@ async function main() {
       fs.writeFileSync(supabasePath, content);
       console.log('✅ Updated src/lib/supabaseClient.ts');
     }
+  }
+
+  // 5. Update android/app/src/main/res/values/strings.xml
+  const stringsXmlPath = path.join(process.cwd(), 'android/app/src/main/res/values/strings.xml');
+  if (fs.existsSync(stringsXmlPath)) {
+    let content = fs.readFileSync(stringsXmlPath, 'utf-8');
+    content = content.replace(/<string name="app_name">.*<\/string>/, `<string name="app_name">${appName}</string>`);
+    content = content.replace(/<string name="title_activity_main">.*<\/string>/, `<string name="title_activity_main">${appName}</string>`);
+    fs.writeFileSync(stringsXmlPath, content);
+    console.log('✅ Updated android/app/src/main/res/values/strings.xml');
+  }
+
+  // 6. Update src/routes/+page.svelte
+  const pageSveltePath = path.join(process.cwd(), 'src/routes/+page.svelte');
+  if (fs.existsSync(pageSveltePath)) {
+    let content = fs.readFileSync(pageSveltePath, 'utf-8');
+    // Replace "Calurcap." in the H1
+    content = content.replace(/Calurcap\./g, `${appName}.`);
+    // Replace "Calurcap" in the title/meta if present (or just generic replacements)
+    content = content.replace(/>\s*Calurcap\s*</g, `>${appName}<`); 
+    fs.writeFileSync(pageSveltePath, content);
+    console.log('✅ Updated src/routes/+page.svelte');
+  }
+
+  // 7. Update MainActivity.java and move it
+  // Current path is hardcoded to com/avarnic/calurcap, we need to find it or assume it's there
+  const javaBasePath = path.join(process.cwd(), 'android/app/src/main/java');
+  // We need to find the current MainActivity.java to know where it is
+  // A simple recursive search or just assuming the default structure if it hasn't changed
+  // For this template, we assume it starts at com/avarnic/calurcap
+  const oldPackagePath = path.join(javaBasePath, 'com', 'avarnic', 'calurcap');
+  const oldActivityPath = path.join(oldPackagePath, 'MainActivity.java');
+
+  if (fs.existsSync(oldActivityPath)) {
+    let content = fs.readFileSync(oldActivityPath, 'utf-8');
+    content = content.replace(/package com\.avarnic\.calurcap;/, `package ${appId};`);
+    
+    // Create new directory structure
+    const newPackagePath = path.join(javaBasePath, ...appId.split('.'));
+    fs.mkdirSync(newPackagePath, { recursive: true });
+    
+    const newActivityPath = path.join(newPackagePath, 'MainActivity.java');
+    fs.writeFileSync(newActivityPath, content);
+    console.log(`✅ Moved MainActivity.java to ${newActivityPath}`);
+
+    // Optional: Clean up old empty directories if they are empty
+    // This is a bit risky if we delete something we shouldn't, so maybe just leave them or try to delete specific ones
+    // For now, let's just leave the old file? No, that causes duplicate class errors. We must delete the old file.
+    fs.unlinkSync(oldActivityPath);
+    
+    // Try to remove empty parent directories
+    try {
+        if (fs.readdirSync(oldPackagePath).length === 0) fs.rmdirSync(oldPackagePath);
+        const parent = path.dirname(oldPackagePath);
+        if (fs.readdirSync(parent).length === 0) fs.rmdirSync(parent);
+    } catch (e) {
+        // Ignore errors deleting directories
+    }
+  } else {
+      console.log('⚠️ Could not find MainActivity.java at default location. Skipping package move.');
   }
 
   console.log('\n✨ Setup complete! You may need to run "npx cap sync" to apply changes to the Android project.\n');
