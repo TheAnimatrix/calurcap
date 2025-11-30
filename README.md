@@ -2,6 +2,16 @@
 
 A SvelteKit + Supabase + Capacitor (Android) application template with Google Sign-In and Tailwind CSS v4.
 
+## Usage as Template
+
+You can easily scaffold a new project from this template using `degit`:
+
+```bash
+npx degit TheAnimatrix/calurcap my-new-app
+cd my-new-app
+npm install
+```
+
 ## Features
 
 - **Framework**: SvelteKit v2 (SPA mode) + Svelte v5
