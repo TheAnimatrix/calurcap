@@ -1,0 +1,87 @@
+# Calurcap
+
+A SvelteKit + Supabase + Capacitor (Android) application template with Google Sign-In and Tailwind CSS v4.
+
+## Features
+
+- **Framework**: SvelteKit (SPA mode)
+- **Styling**: Tailwind CSS v4 with a custom dark theme
+- **Authentication**: Supabase Auth with Google Sign-In
+- **Mobile**: Capacitor for Android deployment
+- **Live Reload**: Seamless development on Android devices
+
+## Prerequisites
+
+- Node.js
+- Android Studio
+- Supabase Project
+- Google Cloud Console Project
+
+## Setup & Installation
+
+### 1. Supabase Setup
+
+1.  Create a new Supabase project.
+2.  Go to **Authentication > Providers** and enable **Google**.
+3.  You will need the **Client ID** and **Client Secret** from Google Cloud Console (see below).
+4.  Copy your Supabase URL and Anon Key.
+5.  Update `src/lib/supabaseClient.ts` with your Supabase URL and Anon Key.
+
+### 2. Google Cloud Console Setup
+
+1.  Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2.  Create a new project.
+3.  Go to **APIs & Services > OAuth consent screen** and configure it (External or Internal).
+4.  Go to **APIs & Services > Credentials**.
+5.  Create an **OAuth 2.0 Client ID** for **Web application**.
+    *   **Authorized JavaScript origins**: `http://localhost:3000` (and your production domain).
+    *   **Authorized redirect URIs**: `https://<YOUR_PROJECT_ID>.supabase.co/auth/v1/callback`.
+    *   Copy the **Client ID** and **Client Secret** to your Supabase Google Provider settings.
+6.  Create another **OAuth 2.0 Client ID** for **Android**.
+    *   You will need the **SHA-1 certificate fingerprint**.
+    *   To get the SHA-1 for your debug keystore:
+        ```bash
+        keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+        ```
+    *   Package name: `com.avarnic.calurcap`.
+7.  Download the `google-services.json` file for the Android client.
+
+### 3. Project Configuration
+
+1.  **Android**:
+    *   Place the `google-services.json` file in `android/app/`.
+2.  **Capacitor**:
+    *   Open `capacitor.config.ts` and update `serverClientId` in the `GoogleAuth` plugin configuration with your **Web Client ID** (not the Android one).
+
+## Running the App
+
+1.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+2.  **Build the web app**:
+    ```bash
+    npm run build
+    ```
+
+3.  **Sync Capacitor**:
+    ```bash
+    npx cap sync
+    ```
+
+4.  **Run on Android with Live Reload**:
+    ```bash
+    npm run dev:android
+    ```
+    This command runs the Vite server and the Capacitor runner concurrently. Ensure your Android device is connected via USB and USB debugging is enabled.
+
+5.  **Open Android Studio** (optional):
+    ```bash
+    npx cap open android
+    ```
+
+## Notes
+
+- **Tailwind CSS**: Styles are located in `src/app.css`.
+- **Port**: The development server runs on port `3000` to ensure compatibility with the Android configuration.
