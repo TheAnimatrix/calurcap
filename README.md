@@ -12,6 +12,27 @@ cd my-new-app
 npm install
 ```
 
+### Quick Setup
+
+Run the setup wizard to automatically configure your project name, ID, and API keys:
+
+```bash
+npm run setup
+```
+
+This interactive script will ask for your:
+- App Name & ID
+- Supabase URL & Key
+- Google Client ID
+
+It will then update `package.json`, `capacitor.config.ts`, `android/app/build.gradle`, and `supabaseClient.ts` for you.
+
+### Manual Steps (Required)
+
+Even after running the script, you must manually:
+1.  **Replace `android/app/google-services.json`** with your own file from **Google Cloud Console** (or Firebase Console if you linked them).
+2.  **Run `npx cap sync`** to apply the Android configuration changes.
+
 ## Features
 
 - **Framework**: SvelteKit v2 (SPA mode) + Svelte v5
