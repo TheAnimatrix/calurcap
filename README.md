@@ -53,38 +53,40 @@ A SvelteKit + Supabase + Capacitor (Android) application template with Google Si
 2.  **Capacitor**:
     *   Open `capacitor.config.ts` and update `serverClientId` in the `GoogleAuth` plugin configuration with your **Web Client ID** (not the Android one).
 
-## Running the App
+## Development Workflow
+
+### Initial Setup (Run Once)
 
 1.  **Install dependencies**:
     ```bash
     npm install
     ```
 
-2.  **Build the web app**:
+2.  **Initialize Native Project**:
+    This builds the web assets and syncs them to the Android project. You only need to repeat this if you install new native plugins (`npm install @capacitor/...`).
     ```bash
     npm run build
-    ```
-
-3.  **Sync Capacitor**:
-    ```bash
     npx cap sync
     ```
 
-4.  **Start the Development Server**:
+### Daily Development
+
+1.  **Start the Development Server**:
     Open a terminal and run:
     ```bash
     npm run dev
     ```
     This starts the Vite server on port 3000.
 
-5.  **Run on Android with Live Reload**:
+2.  **Run on Android with Live Reload**:
     Open a **second terminal** and run:
     ```bash
     npm run dev:android
     ```
     Ensure your Android device is connected via USB and USB debugging is enabled.
 
-6.  **Open Android Studio** (optional):
+3.  **Open Android Studio** (optional):
+    If you need to edit native code or debug Java/Kotlin issues:
     ```bash
     npx cap open android
     ```
