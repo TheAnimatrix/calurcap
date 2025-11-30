@@ -78,8 +78,22 @@ async function main() {
     let content = fs.readFileSync(stringsXmlPath, 'utf-8');
     content = content.replace(/<string name="app_name">.*<\/string>/, `<string name="app_name">${appName}</string>`);
     content = content.replace(/<string name="title_activity_main">.*<\/string>/, `<string name="title_activity_main">${appName}</string>`);
+    content = content.replace(/<string name="package_name">.*<\/string>/, `<string name="package_name">${appId}</string>`);
+    content = content.replace(/<string name="custom_url_scheme">.*<\/string>/, `<string name="custom_url_scheme">${appId}</string>`);
     fs.writeFileSync(stringsXmlPath, content);
     console.log('✅ Updated android/app/src/main/res/values/strings.xml');
+  }
+
+  // 5.5 Update package-lock.json
+  const packageLockJsonPath = path.join(process.cwd(), 'package-lock.json');
+  if (fs.existsSync(packageLockJsonPath)) {
+    const pkgLock = JSON.parse(fs.readFileSync(packageLockJsonPath, 'utf-8'));
+    pkgLock.name = appName.toLowerCase().replace(/\s+/g, '-');
+    if (pkgLock.packages && pkgLock.packages[""]) {
+        pkgLock.packages[""].name = pkgLock.name;
+    }
+    fs.writeFileSync(packageLockJsonPath, JSON.stringify(pkgLock, null, '\t'));
+    console.log('✅ Updated package-lock.json');
   }
 
   // 6. Update src/routes/+page.svelte

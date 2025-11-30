@@ -14,10 +14,11 @@ npm install
 
 ### Quick Setup
 
-Run the setup wizard to automatically configure your project name, ID, and API keys:
+Run the setup wizard **before** installing dependencies to automatically configure your project name, ID, and API keys:
 
 ```bash
 npm run setup
+npm install
 ```
 
 This interactive script will ask for your:
