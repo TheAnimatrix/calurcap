@@ -4,10 +4,10 @@ A SvelteKit + Supabase + Capacitor (Android) application template with Google Si
 
 ## Features
 
-- **Framework**: SvelteKit (SPA mode)
+- **Framework**: SvelteKit v2 (SPA mode) + Svelte v5
 - **Styling**: Tailwind CSS v4 with a custom dark theme
-- **Authentication**: Supabase Auth with Google Sign-In
-- **Mobile**: Capacitor for Android deployment
+- **Authentication**: Supabase Auth v2 with Google Sign-In
+- **Mobile**: Capacitor v7 for Android deployment
 - **Live Reload**: Seamless development on Android devices
 
 ## Prerequisites
@@ -70,13 +70,21 @@ A SvelteKit + Supabase + Capacitor (Android) application template with Google Si
     npx cap sync
     ```
 
-4.  **Run on Android with Live Reload**:
+4.  **Start the Development Server**:
+    Open a terminal and run:
+    ```bash
+    npm run dev
+    ```
+    This starts the Vite server on port 3000.
+
+5.  **Run on Android with Live Reload**:
+    Open a **second terminal** and run:
     ```bash
     npm run dev:android
     ```
-    This command runs the Vite server and the Capacitor runner concurrently. Ensure your Android device is connected via USB and USB debugging is enabled.
+    Ensure your Android device is connected via USB and USB debugging is enabled.
 
-5.  **Open Android Studio** (optional):
+6.  **Open Android Studio** (optional):
     ```bash
     npx cap open android
     ```
